@@ -30,9 +30,9 @@
 <strong>Autor:</strong> {$clanek->autor}
 </p>
 {/if}
-<p>
+{*<p>
 <strong>Přečteno:</strong> {$clanek->precteno}x
-</p>
+</p>*}
 {if !empty($clanek->stitky)}
 <p class="stitky">
 <strong>Štítky:</strong> {foreach $clanek->stitky as $stitek}<a n:href="Homepage:default stitek => $stitek">#{$stitek}</a> {/foreach}
