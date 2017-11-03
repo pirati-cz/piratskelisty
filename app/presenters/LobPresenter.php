@@ -20,9 +20,24 @@ class LobPresenter extends BasePresenter
     }
 
 
-    public function renderDefault($limit = 10,$offset=0)
+    public function renderDefault($limit = 10,$offset=0, $format = 'html')
     {
-        $this->template->lobs = $this->rss->getLobs($limit, $offset);
+       $lobs = $this->rss->getLobs($limit, $offset);
+       if ($format=='json') {
+           $lobs2 = array();
+           foreach ($lobs as $lob) {
+               $lobs2[] = array(
+                   "id" => $lob->id,
+                   "content" => $lob->content,
+                   "published" => $lob->published,
+                   "author" => $lob->author,
+                   "source" => "https://forum.pirati.cz/post".$lob->post_id.".html");
+           }
+           $this->getHttpResponse()->addHeader("Access-Control-Allow-Origin","*");
+           $this->sendResponse(new Nette\Application\Responses\JsonResponse($lobs2, "text/json"));
+       }
+       
+        $this->template->lobs = $lobs;
 		$this->template->next_offset = $offset + $limit;
 		$this->template->limit = $limit;
 		$this->payload->append = 'snippet--lobs';
