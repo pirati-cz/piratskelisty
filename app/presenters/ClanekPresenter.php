@@ -36,7 +36,19 @@ class ClanekPresenter extends BasePresenter
         $form->addHidden("skryte");
         $form->addSubmit("komentuj", "Přidat komentář");
         $form->addHidden("clanek_id")->setValue($this->id);
-        $form->onSuccess[] = $this->komentar;
+        $form->onSuccess[] = function($form) {
+            $vals = $form->getValues();
+            if ($vals['skryte'] == 'asdf') {
+                $this->komentare->add($vals);
+                $this->template->pridej_komentar = false;
+            }
+            $this->redrawControl("komentare");
+            $this->redrawControl("pridej_komentar");
+
+            if (!$this->isAjax()) {
+                $this->redirect("this");
+            }
+        };
         return $form;
     }
 
@@ -44,21 +56,6 @@ class ClanekPresenter extends BasePresenter
     {
         $this->template->pridej_komentar = true;
         $this->redrawControl("pridej_komentar");
-    }
-
-    public function komentar($form)
-    {
-        $vals = $form->getValues();
-        if ($vals['skryte'] == 'asdf') {
-            $this->komentare->add($vals);
-            $this->template->pridej_komentar = false;
-        }
-        $this->redrawControl("komentare");
-        $this->redrawControl("pridej_komentar");
-
-        if (!$this->isAjax()) {
-            $this->redirect("this");
-        }
     }
 
     public function renderDefault($id, $nazev)

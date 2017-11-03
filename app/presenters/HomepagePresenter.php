@@ -46,7 +46,7 @@ class HomepagePresenter extends BasePresenter
 
         } elseif ($offset==0 ) {
             $clanky = $this->clanky->getClanky(1, 0,$url,$stitek,$aktuality,$search);
-            $this->template->clanek = $clanky[0];
+            $this->template->clanek1 = $clanky[0];
             $offset2 =+ 1;
             $limit2 -= 1;
         }

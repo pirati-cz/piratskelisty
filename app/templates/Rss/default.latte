@@ -15,7 +15,7 @@
         <description>{$clanek->perex|stripTags}</description>
         <category>{$clanek->kategorie}</category>
         <comments>{link //Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}#komentare</comments>
-        <pubDate><?php echo gmdate("D, d M Y H:i:s", $clanek->datum_vydani->getTimestamp())." GMT"; ?></pubDate>
+        <pubDate>{php echo gmdate("D, d M Y H:i:s", $clanek->datum_vydani->getTimestamp())." GMT"; }</pubDate>
     </item>
     {/foreach}
 </channel>

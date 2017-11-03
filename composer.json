@@ -1,6 +1,6 @@
 {
     "require": {
-        "nette/nette": "~2",
+        "nette/nette": "~2.3",
         "soundasleep/lightopenid": "^0.1.0",
         "sunra/php-simple-html-dom-parser": "^1.5"
     }

@@ -13,14 +13,13 @@ php:
 	# zlib.output_compression: yes
 
 
-nette:
-	application:
-		errorPresenter: Error
-		mapping:
-			*: App\*Module\Presenters\*Presenter
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
 
-	session:
-		expiration: 14 days
+session:
+	expiration: 14 days
 
 
 services:

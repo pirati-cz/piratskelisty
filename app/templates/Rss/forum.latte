@@ -13,7 +13,7 @@
         <link>{$item->link}</link>
         <guid>{$item->link}</guid>
         <description>{$item->description}</description>
-        <pubDate><?php echo gmdate("D, d M Y H:i:s", $item->pub_date->getTimestamp())." GMT"; ?></pubDate>
+        <pubDate>{php echo gmdate("D, d M Y H:i:s", $item->pub_date->getTimestamp())." GMT"; }</pubDate>
     </item>
     {/foreach}
 </channel>
