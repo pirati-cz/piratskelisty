@@ -27,6 +27,21 @@
 	<link rel="alternate" title="Pirátské listy - Články" n:href=":Rss:default" type="application/rss+xml" />
     <link rel="alternate" title="Pirátské listy - Aktuality" n:href=":Rss:aktuality" type="application/rss+xml" />
 	{block head}{/block}
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+	    var u="//piwik.pirati.cz/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', '4']);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<!-- End Piwik Code -->
 </head>
 
 <body>
