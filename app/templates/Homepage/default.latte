@@ -5,8 +5,8 @@
 <div class="prispevek">
 <div class="clanek_obrazek hlavni_clanek_obrazek">
 <a n:href="Clanek:default $clanek1->id, Nette\Utils\Strings::webalize($clanek1['titulek'])">
-{if !empty($clanek->obrazek_id)}
-    <img src="{link Service:Thumbnail:default 'id' => $clanek1->obrazek_id, 'width' => 500, 'format' => jpg}" alt="{$clanek->alt}" title="{$clanek->titulek}" />
+{if !empty($clanek1->obrazek_id)}
+    <img src="{link Service:Thumbnail:default 'id' => $clanek1->obrazek_id, 'width' => 500, 'format' => jpg}" alt="{$clanek1->alt}" title="{$clanek1->titulek}" />
 {/if}
 </a>
 </div>
