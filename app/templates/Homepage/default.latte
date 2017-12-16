@@ -47,7 +47,7 @@
 <h2><a n:href="Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])">{$clanek->titulek}</a></h2>
 <div class="datum_diskuze" >{$clanek->datum_vydani|czTextDate}
 | {$clanek->autor}
- {if !empty($clanek->komentaru)}| <a href="{link Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}#komentare">{$clanek->komentaru|komentare}</a>{/if}
+ {if !empty($clanek->komentaru)}| <a href="{link Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}#komentare">{$clanek->komentaru|komentare|noescape}</a>{/if}
  </div>
 <p>{$clanek->perex|stripTags|truncate:200}</p>
 </div>
