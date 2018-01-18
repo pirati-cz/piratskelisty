@@ -49,7 +49,7 @@
 | {$clanek->autor}
  {if !empty($clanek->komentaru)}| <a href="{link Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}#komentare">{$clanek->komentaru|komentare|noescape}</a>{/if}
  </div>
-<p>{$clanek->perex|stripTags|truncate:200}</p>
+<p>{$clanek->perex|stripTags|truncate:200|noescape}</p>
 </div>
 </div>
 <div class="clear"></div>
