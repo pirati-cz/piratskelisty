@@ -17,7 +17,7 @@
 | {$clanek1->autor}
  {if !empty($clanek1->komentaru)}| <a href="{link Clanek:default $clanek1->id, Nette\Utils\Strings::webalize($clanek1['titulek'])}#komentare">{$clanek1->komentaru|komentare|noescape}</a>{/if}
  </div>
-<p>{$clanek1->perex|stripTags|truncate:400}</p>
+<p>{$clanek1->perex|stripTags|truncate:400|noescape}</p>
 {*    <a n:href=":Homepage:podpora" >
     <img src="{$basePath}/images/podpora_banner.png" alt="Podpořte Pirátské listy" />
     </a>*}
