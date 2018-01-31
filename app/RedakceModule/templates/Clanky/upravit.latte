@@ -1,7 +1,7 @@
 {block full}
 <h1>{if empty($clanek)}Nový článek{else}Úprava článku {$clanek->titulek}{/if}</h1>
 {control clanek}
-Pozor, klikni jen, máš li článek uložen! <a n:href=":Clanek:default, $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])">Náhled</a>
+Pozor, klikni jen, máš-li článek uložen! <a n:href=":Clanek:default, $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])">Náhled</a>
 {/block}
 
 {block scripts}
