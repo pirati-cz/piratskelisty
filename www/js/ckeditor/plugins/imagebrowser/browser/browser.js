@@ -4,12 +4,26 @@ CkEditorImageBrowser.folders = [];
 CkEditorImageBrowser.images = {}; //folder => list of images
 CkEditorImageBrowser.ckFunctionNum = null;
 
+CkEditorImageBrowser.$folderSwitcher = null;
+CkEditorImageBrowser.$imagesContainer = null;
+
 CkEditorImageBrowser.init = function () {
+	CkEditorImageBrowser.$folderSwitcher = $('#js-folder-switcher');
+	CkEditorImageBrowser.$imagesContainer = $('#js-images-container');
+
+	var baseHref = CkEditorImageBrowser.getQueryStringParam("baseHref");
+	if (baseHref) {
+		var h = (document.head || document.getElementsByTagName("head")[0]),
+			el = h.getElementsByTagName("link")[0];
+		el.href = location.href.replace(/\/[^\/]*$/,"/browser.css");
+		(h.getElementsByTagName("base")[0]).href = baseHref;
+	}
+
 	CkEditorImageBrowser.ckFunctionNum = CkEditorImageBrowser.getQueryStringParam('CKEditorFuncNum');
 
 	CkEditorImageBrowser.initEventHandlers();
 
-	CkEditorImageBrowser.loadData(decodeURIComponent(CkEditorImageBrowser.getQueryStringParam('listUrl')), function () {
+	CkEditorImageBrowser.loadData(CkEditorImageBrowser.getQueryStringParam('listUrl'), function () {
 		CkEditorImageBrowser.initFolderSwitcher();
 	});
 };
@@ -24,112 +38,99 @@ CkEditorImageBrowser.loadData = function (url, onLoaded) {
 				item.folder = 'Images';
 			}
 
-			CkEditorImageBrowser.ensureFolderCreated(item.folder);
-			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb, item.alt, item.title);
+			if (typeof(item.thumb) === 'undefined') {
+				item.thumb = item.image;
+			}
+
+			CkEditorImageBrowser.addImage(item.folder, item.image, item.thumb);
 		});
 
 		onLoaded();
-	});
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		var errorMessage;
+		if (jqXHR.status < 200 || jqXHR.status >= 400) {
+			errorMessage = 'HTTP Status: ' + jqXHR.status + '/' + jqXHR.statusText + ': "<strong style="color: red;">' + url + '</strong>"';
+		} else if (textStatus === 'parsererror') {
+			errorMessage = textStatus + ': invalid JSON file: "<strong style="color: red;">' + url + '</strong>": ' + errorThrown.message;
+		} else {
+			errorMessage = textStatus + ' / ' + jqXHR.statusText + ' / ' + errorThrown.message;
+		}
+		CkEditorImageBrowser.$imagesContainer.html(errorMessage);
+    });
 };
 
-CkEditorImageBrowser.ensureFolderCreated = function (folderName) {
-	if (CkEditorImageBrowser.folders.indexOf(folderName) === -1) {
+CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl) {
+	if (typeof(CkEditorImageBrowser.images[folderName]) === 'undefined') {
 		CkEditorImageBrowser.folders.push(folderName);
 		CkEditorImageBrowser.images[folderName] = [];
 	}
-};
 
-CkEditorImageBrowser.addImage = function (folderName, imageUrl, thumbUrl, imageAlt, imageTitle) {
 	CkEditorImageBrowser.images[folderName].push({
 		"imageUrl": imageUrl,
-		"thumbUrl": thumbUrl,
-                "imageTitle": imageTitle,
-                "imageAlt": imageAlt
+		"thumbUrl": thumbUrl
 	});
 };
 
 CkEditorImageBrowser.initFolderSwitcher = function () {
-	var $switcher = $('#js-folder-switcher');
+	var $switcher = CkEditorImageBrowser.$folderSwitcher;
 
-	$switcher.find('option').remove();
+	$switcher.find('li').remove();
 
 	$.each(CkEditorImageBrowser.folders, function (idx, folderName) {
-		var $option = $('<option></option>').val(idx).text(folderName);
+		var $option = $('<li></li>').data('idx', idx).text(folderName);
 		$option.appendTo($switcher);
 	});
 
-	if (CkEditorImageBrowser.folders.length === 1) {
-		$switcher.hide();
-	}
 
-	$switcher.trigger("change");
+	if (CkEditorImageBrowser.folders.length === 0) {
+		$switcher.remove();
+		CkEditorImageBrowser.$imagesContainer.text('No images.');
+	} else {
+		if (CkEditorImageBrowser.folders.length === 1) {
+			$switcher.hide();
+		}
+
+		$switcher.find('li:first').click();
+	}
 };
 
 CkEditorImageBrowser.renderImagesForFolder = function (folderName) {
 	var images = CkEditorImageBrowser.images[folderName],
-		templateHtml = $('#js-template-image').html(),
-		$imagesContainer = $('#js-images-container');
+		templateHtml = $('#js-template-image').html();
 
-	$imagesContainer.html('');
+	CkEditorImageBrowser.$imagesContainer.html('');
 
-	$.each(images, function (idx, imageData) {
+	$.each(images, function (_idx, imageData) {
 		var html = templateHtml;
 		html = html.replace('%imageUrl%', imageData.imageUrl);
 		html = html.replace('%thumbUrl%', imageData.thumbUrl);
-		html = html.replace('%imageTitle%', imageData.imageTitle);
-		html = html.replace('%imageAlt%', imageData.imageAlt);
 
 		var $item = $($.parseHTML(html));
 
-		$imagesContainer.append($item);
+		CkEditorImageBrowser.$imagesContainer.append($item);
 	});
 };
 
 CkEditorImageBrowser.initEventHandlers = function () {
-	$('#js-folder-switcher').change(function () {
-		var idx = parseInt($(this).val(), 10),
+	$(document).on('click', '#js-folder-switcher li', function () {
+		var idx = parseInt($(this).data('idx'), 10),
 			folderName = CkEditorImageBrowser.folders[idx];
+
+		$(this).siblings('li').removeClass('active');
+		$(this).addClass('active');
 
 		CkEditorImageBrowser.renderImagesForFolder(folderName);
 	});
 
 	$(document).on('click', '.js-image-link', function () {
-		var imageUrl = $(this).data('url');
-		var imageTitle = $(this).data('title');
-		var imageAlt = $(this).data('alt');
-                
-		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, imageUrl, 
-    function() {
-        
-  // Get the reference to a dialog window.
-  var element, dialog = this.getDialog();
-  // Check if this is the Image dialog window.
-  if (dialog.getName() == 'image') {
-    // Get the reference to a text field that holds the "alt" attribute.
-    element = dialog.getContentElement( 'info', 'txtAlt' );
-    // Assign the new value.
-    if ( element )
-      element.setValue( imageAlt);
-  
-      element = dialog.getContentElement( 'advanced', 'txtGenTitle' );
-    // Assign the new value.
-    if ( element )
-      element.setValue( imageTitle);
-  }
-  
-  // Return false to stop further execution - in such case CKEditor will ignore the second argument (fileUrl)
-  // and the onSelect function assigned to a button that called the file browser (if defined).
- // return false;
-}        
-        
-    );
+		window.opener.CKEDITOR.tools.callFunction(CkEditorImageBrowser.ckFunctionNum, $(this).data('url'));
 		window.close();
 	});
 };
 
 CkEditorImageBrowser.getQueryStringParam = function (name) {
-	var regex = new RegExp('[\?|&]' + name + '=(.+?)[\&|$]'),
+	var regex = new RegExp('[?&]' + name + '=([^&]*)'),
 		result = window.location.search.match(regex);
 
-	return (result && result.length > 1 ? result[1] : null);
+	return (result && result.length > 1 ? decodeURIComponent(result[1]) : null);
 };
