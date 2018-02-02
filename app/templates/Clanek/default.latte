@@ -30,6 +30,12 @@
 <strong>Autor:</strong> {$clanek->autor}
 </p>
 {/if}
+{if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
+    <div class="redakce-dole">
+        <a n:href=":Redakce:Clanky:upravit $clanek->id">Upravit</a>
+    </div>
+{/if}
+
 {*<p>
 <strong>Přečteno:</strong> {$clanek->precteno}x
 </p>*}
