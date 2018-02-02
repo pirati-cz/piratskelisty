@@ -30,6 +30,14 @@
 <strong>Autor:</strong> {$clanek->autor}
 </p>
 {/if}
+{if $user->isLoggedIn()}
+    <div class="redakce-dole">
+        {if $user->isAllowed("clanky", "zobrazit")}
+            <a n:href=":Redakce:Clanky:upravit">Upravit</a>
+        {/if}
+    </div>
+{/if}
+
 {*<p>
 <strong>Přečteno:</strong> {$clanek->precteno}x
 </p>*}
