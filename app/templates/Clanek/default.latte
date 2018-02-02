@@ -30,11 +30,9 @@
 <strong>Autor:</strong> {$clanek->autor}
 </p>
 {/if}
-{if $user->isLoggedIn()}
+{if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
     <div class="redakce-dole">
-        {if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
-            <a n:href=":Redakce:Clanky:upravit$clanek->id">Upravit</a>
-        {/if}
+        <a n:href=":Redakce:Clanky:upravit $clanek->id">Upravit</a>
     </div>
 {/if}
 
