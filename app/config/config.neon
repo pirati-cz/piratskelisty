@@ -36,6 +36,7 @@ services:
 	authorizator:
 		class: Nette\Security\Permission
 		setup:
+			- addRole('guest')
 			- addRole('authenticated')
 			- addRole('clen_tymu')
 			- addRole('spravce')
