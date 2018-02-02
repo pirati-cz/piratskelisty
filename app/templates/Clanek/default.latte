@@ -32,8 +32,8 @@
 {/if}
 {if $user->isLoggedIn()}
     <div class="redakce-dole">
-        {if $user->isAllowed("clanky", "zobrazit")}
-            <a n:href=":Redakce:Clanky:upravit">Upravit</a>
+        {if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
+            <a n:href=":Redakce:Clanky:upravit$clanek->id">Upravit</a>
         {/if}
     </div>
 {/if}
