@@ -91,9 +91,9 @@ class Clanky extends \Nette\Object
                                         WHERE c.id=? and c.smazano=0 ORDER BY cr.id DESC LIMIT 1;",$id);
 
         $stitky = $this->database->fetchPairs("SELECT stitek FROM clanky_stitky WHERE clanek_id=?;",$id);
-        if (!empty($clanek))
-		$clanek->stitky = array_unique($stitky);
-
+        if (!empty($clanek)) {
+		        $clanek->stitky = array_unique($stitky);
+        }
         return $clanek;
 
     }
@@ -167,6 +167,14 @@ class Clanky extends \Nette\Object
     }
     public function addStitek($stitek) {
         $this->database->query("INSERT INTO stitky ",["stitek" => $stitek]);
+    }
+    public function getStitkyPairs() {
+        $stitky = $this->getStitky();
+        $arr = [];
+        foreach ($stitky as $stitek) {
+          $arr[$stitek->stitek] = $stitek;
+        }
+        return $arr;
     }
     public function getSkupiny() {
         return $this->database->query("select count(skupina) as cnt,skupina from clanky group by skupina order by skupina");

@@ -44,7 +44,7 @@ class ClankyPresenter extends BasePresenter
         $form->addSelect("obrazek_id", "Obrázek", $this->upload->getPairs())->setPrompt("-- bez obrázku --");
         $form->addTextArea("text", "Text");
 
-        $form->addTextArea("stitky_text", "Štítky");
+        $form->addMultiSelect("stitky", "Štítky", $this->clanky->getStitkyPairs());
         $form->addText("skupina", "Skupina");
         $form->addSubmit("save", "Uložit");
         $form->onSuccess[] = $this->saveClanek;
@@ -145,16 +145,12 @@ class ClankyPresenter extends BasePresenter
         if (!empty($id)) {
             $clanek = $this->clanky->get($id);
             $count = count($clanek->stitky);
-            $stitky = "";
+            $arr = [];
             foreach ($clanek->stitky as $stitek) {
-                if ($count > 1) {
-                    $stitky .= $stitek . "\n";
-                } else {
-                    $stitky .= $stitek;
-                }
-                $count--;
+                $arr[$stitek] = 1;
             }
-            $clanek['stitky_text'] = $stitky;
+            $this['clanek']['stitky']->setDefaults($arr);
+            unset($clanek->stitky);
             $this['clanek']->setDefaults($clanek);
             $this->template->clanek = $clanek;
 
