@@ -24,19 +24,19 @@ class Clanky extends \Nette\Object
         return $this->database->fetchAll("SELECT *,IF(datum_vydani IS NULL, 1, 0) AS vydano FROM clanky WHERE smazano=0 ORDER BY vydano DESC,datum_vydani DESC;");
     }
     public function getPairs($id) {
-	return $this->database->fetchPairs("SELECT id,titulek,IF(datum_vydani IS NULL, 1, 0) AS vydano from clanky 
-	where id!=? 
+	return $this->database->fetchPairs("SELECT id,titulek,IF(datum_vydani IS NULL, 1, 0) AS vydano from clanky
+	where id!=?
 	and id not in (select souvisejici_id from souvisejici_clanky where clanek_id=?)
 	order by vydano DESC,datum_vydani desc;",$id,$id);
     }
     public function getSouvisejici($id,$all=false) {
         if ($all) {
-            return $this->database->fetchAll("SELECT * FROM clanky 
+            return $this->database->fetchAll("SELECT * FROM clanky
 	    where id in (SELECT souvisejici_id FROM souvisejici_clanky where clanek_id=?);
 	    order by datum_vydani desc",$id);
 	} else {
-            return $this->database->fetchAll("SELECT * FROM clanky 
-	    where datum_vydani is not null 
+            return $this->database->fetchAll("SELECT * FROM clanky
+	    where datum_vydani is not null
 	    and id in (SELECT souvisejici_id FROM souvisejici_clanky where clanek_id=?);
 	    order by datum_vydani desc",$id);
 	}
@@ -64,7 +64,7 @@ class Clanky extends \Nette\Object
             return $this->database->fetchAll($query1."AND k.url!='aktuality' AND k.url=?".$query2
                 ,new \DateTime(),$url,$limit,$offset);
         } elseif (!empty($stitek)) {
-            return $this->database->fetchAll($query1."AND c.id IN (SELECT clanek_id FROM stitky WHERE stitek=?)".$query2
+            return $this->database->fetchAll($query1."AND c.id IN (SELECT clanek_id FROM clanky_stitky WHERE stitek=?)".$query2
                 ,new \DateTime(),$stitek,$limit,$offset);
         } elseif (!empty($skupina)) {
             return $this->database->fetchAll($query1."AND c.skupina=?".$query2
@@ -90,7 +90,7 @@ class Clanky extends \Nette\Object
                                         LEFT JOIN upload u ON (c.obrazek_id = u.id)
                                         WHERE c.id=? and c.smazano=0 ORDER BY cr.id DESC LIMIT 1;",$id);
 
-        $stitky = $this->database->fetchPairs("SELECT stitek FROM stitky WHERE clanek_id=?;",$id);
+        $stitky = $this->database->fetchPairs("SELECT stitek FROM clanky_stitky WHERE clanek_id=?;",$id);
         if (!empty($clanek))
 		$clanek->stitky = array_unique($stitky);
 
@@ -118,7 +118,7 @@ class Clanky extends \Nette\Object
         $arr = array("clanek_id" => $id, "perex" => $vals['perex'], "text" => $vals['text']);
         $this->database->query("INSERT INTO clanky_revize", $arr);
 
-        $this->database->query("DELETE FROM stitky WHERE clanek_id=?;",$id);
+        $this->database->query("DELETE FROM clanky_stitky WHERE clanek_id=?;",$id);
         $stitky = explode("\n", $vals['stitky_text']);
         foreach ($stitky as $key => $stitek) {
             if (empty($stitek)) continue;
@@ -126,7 +126,7 @@ class Clanky extends \Nette\Object
         }
         $stitky = array_unique($stitky);
         foreach ($stitky as $stitek) {
-            $this->database->query("INSERT INTO stitky ", array("clanek_id" => $id, "stitek" => trim($stitek)));
+            $this->database->query("INSERT INTO clanky_stitky ", array("clanek_id" => $id, "stitek" => trim($stitek)));
         }
         return $id;
     }
@@ -163,7 +163,7 @@ class Clanky extends \Nette\Object
         $this->database->query("UPDATE clanky SET precteno=precteno+1 WHERE id=?;",$id);
     }
     public function getStitky() {
-        return $this->database->query("select count(stitek) as cnt,stitek from stitky group by stitek order by stitek");
+        return $this->database->query("select count(stitek) as cnt,stitek from clanky_stitky group by stitek order by stitek");
     }
     public function getSkupiny() {
         return $this->database->query("select count(skupina) as cnt,skupina from clanky group by skupina order by skupina");
