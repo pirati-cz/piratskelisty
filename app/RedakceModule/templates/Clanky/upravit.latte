@@ -4,7 +4,18 @@
 Pozor, klikni jen, máš-li článek uložen! <a n:href=":Clanek:default, $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])">Náhled</a>
 {/block}
 
+
+{block head}
+  <link href="{$basePath}/js/select2/css/select2.min.css" rel="stylesheet" />
+{/block}
 {block scripts}
+  <script src="{$basePath}/js/select2/js/select2.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      $('select.stitky').select2();
+    });
+  </script>
+
 <script type="text/javascript" src="{$basePath}/js/ckeditor/ckeditor.js" ></script>
 <script type="text/javascript">
 $(document).ready(function() {

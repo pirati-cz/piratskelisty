@@ -44,7 +44,8 @@ class ClankyPresenter extends BasePresenter
         $form->addSelect("obrazek_id", "Obrázek", $this->upload->getPairs())->setPrompt("-- bez obrázku --");
         $form->addTextArea("text", "Text");
 
-        $form->addMultiSelect("stitky", "Štítky", $this->clanky->getStitkyPairs());
+        $form->addMultiSelect("stitky", "Štítky", $this->clanky->getStitkyPairs())
+            ->getControlPrototype()->class('stitky');;
         $form->addText("skupina", "Skupina");
         $form->addSubmit("save", "Uložit");
         $form->onSuccess[] = $this->saveClanek;
