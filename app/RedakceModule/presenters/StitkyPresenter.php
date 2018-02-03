@@ -19,8 +19,13 @@ class StitkyPresenter extends BasePresenter
         $form->addSubmit("save", "Uložit");
         $form->onSuccess[] = function($form) {
             $vals = $form->getValues();
-            $this->clanky->addStitek($vals['stitek']);
-            $this->flashMessage("Štítek přidán.");
+            try {
+                $this->clanky->addStitek($vals['stitek']);
+            } catch (\Nette\Database\UniqueConstraintViolationException $e) {
+              $this->flashMessage("Štítek ".$vals['stitek']." se nepodařilo přidat; není unikátní.");
+              $this->redirect("this");
+            }
+            $this->flashMessage("Štítek ".$vals['stitek']." přidán.");
             $this->redirect("default");
         };
         return $form;

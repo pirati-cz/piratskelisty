@@ -6,3 +6,5 @@ CREATE TABLE `stitky` (
 ) COLLATE 'utf8_czech_ci';
 
 insert into stitky (stitek) select distinct stitek from clanky_stitky;
+
+ALTER TABLE `stitky` ADD UNIQUE `stitek` (`stitek`);
