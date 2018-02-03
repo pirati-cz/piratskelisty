@@ -163,7 +163,10 @@ class Clanky extends \Nette\Object
         $this->database->query("UPDATE clanky SET precteno=precteno+1 WHERE id=?;",$id);
     }
     public function getStitky() {
-        return $this->database->query("select count(stitek) as cnt,stitek from clanky_stitky group by stitek order by stitek");
+        return $this->database->query("select * from stitky order by stitek");
+    }
+    public function addStitek($stitek) {
+        $this->database->query("INSERT INTO stitky ",["stitek" => $stitek]);
     }
     public function getSkupiny() {
         return $this->database->query("select count(skupina) as cnt,skupina from clanky group by skupina order by skupina");
