@@ -27,7 +27,7 @@ class Clanky extends \Nette\Object
 	return $this->database->fetchPairs("SELECT id,titulek,IF(datum_vydani IS NULL, 1, 0) AS vydano from clanky
 	where id!=?
 	and id not in (select souvisejici_id from souvisejici_clanky where clanek_id=?)
-	order by vydano DESC,datum_vydani desc;",$id,$id);
+	order by titulek;",$id,$id);
     }
     public function getSouvisejici($id,$all=false) {
         if ($all) {

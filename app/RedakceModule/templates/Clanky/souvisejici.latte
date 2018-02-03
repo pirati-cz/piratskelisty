@@ -20,3 +20,16 @@
 {/if}
 
 {/block}
+
+
+{block head}
+  <link href="{$basePath}/js/select2/css/select2.min.css" rel="stylesheet" />
+{/block}
+{block scripts}
+  <script src="{$basePath}/js/select2/js/select2.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      $('select[name=souvisejici_id]').select2();
+    });
+  </script>
+{/block}
