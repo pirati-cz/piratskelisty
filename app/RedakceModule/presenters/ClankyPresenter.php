@@ -35,8 +35,10 @@ class ClankyPresenter extends BasePresenter
         $form = new Form;
         $form->addHidden("id");
         $form->addText("titulek", "Titulek")
+            ->setRequired("Vyplňte prosím titulek článku.")
             ->addRule(Form::MAX_LENGTH, "Titulek je příliš dlouhý", 64);
         $form->addText("autor", "Autor")
+            ->setRequired("Vyplňte prosím autora článku")
             ->addRule(Form::MAX_LENGTH, "Autor je příliš dlouhý", 64);
 
         $form->addSelect("kategorie_id", "Kategorie", $this->kategorie->getPairs());
@@ -48,7 +50,24 @@ class ClankyPresenter extends BasePresenter
             ->getControlPrototype()->class('stitky');;
         $form->addText("skupina", "Skupina");
         $form->addSubmit("save", "Uložit");
-        $form->onSuccess[] = $this->saveClanek;
+        $form->onSuccess[] = function(Form $form)
+        {
+            $vals = $form->getValues();
+            $clanek = $this->clanky->get($vals['id']);
+
+            if (!$this->getUser()->isAllowed("clanky") &&
+                !($this->getUser()->isAllowed("clanky", "upravit_nevydany") && (empty($clanek) || empty($clanek->datum_vydani)))
+            )
+            {
+                $this->flashMessage("Nemáte oprávnění upravovat článek.");
+                $this->redirect(":Redakce:Clanky:");
+            }
+            $id = $this->clanky->add($vals);
+            $clanek = $this->clanky->get($id);
+            $this->flashMessage("Článek " . $clanek['titulek'] . " byl uložen.");
+
+            $this->redirect("upravit", $id);
+        };
         return $form;
     }
 
@@ -63,7 +82,18 @@ class ClankyPresenter extends BasePresenter
             ->setDefaultValue(date("H:i"));
 
         $form->addSubmit("save", "Uložit");
-        $form->onSuccess[] = $this->publishClanek;
+        $form->onSuccess[] = function(Form $form)
+        {
+            $vals = $form->getValues();
+            $clanek = $this->clanky->get($vals['id']);
+            if (!$this->getUser()->isAllowed("clanky", "vydat")) {
+                $this->flashMessage("Nemáte oprávnění vydávat články.");
+                $this->redirect(":Redakce:Clanky:");
+            }
+            $this->clanky->publish($vals);
+            $this->flashMessage("Vydání článku " . $clanek['titulek'] . " bylo naplánováno.");
+            $this->redirect("default");
+        };
         return $form;
     }
 
@@ -73,53 +103,18 @@ class ClankyPresenter extends BasePresenter
         $form->addHidden("clanek_id");
         $form->addSelect("souvisejici_id", "Související článek");
         $form->addSubmit("add", "Přidat");
-        $form->onSuccess[] = $this->addSouvisejici;
-        return $form;
-    }
-
-
-    public function saveClanek(Form $form)
-    {
-        $vals = $form->getValues();
-        $clanek = $this->clanky->get($vals['id']);
-
-        if (!$this->getUser()->isAllowed("clanky") &&
-            !($this->getUser()->isAllowed("clanky", "upravit_nevydany") && (empty($clanek) || empty($clanek->datum_vydani)))
-        )
+        $form->onSuccess[] = function($form)
         {
-            $this->flashMessage("Nemáte oprávnění upravovat článek.");
-            $this->redirect(":Redakce:Clanky:");
-        }
-        $id = $this->clanky->add($vals);
-        $clanek = $this->clanky->get($id);
-        $this->flashMessage("Článek " . $clanek['titulek'] . " byl uložen.");
+            if (!$this->getUser()->isAllowed("clanky", "souvisejici")) {
+                $this->flashMessage("Nemáte oprávnění upravovat související články.");
+                $this->redirect("this");
+            }
 
-        $this->redirect("upravit", $id);
-    }
-
-    public function publishClanek(Form $form)
-    {
-        $vals = $form->getValues();
-        $clanek = $this->clanky->get($vals['id']);
-        if (!$this->getUser()->isAllowed("clanky", "vydat")) {
-            $this->flashMessage("Nemáte oprávnění vydávat články.");
-            $this->redirect(":Redakce:Clanky:");
-        }
-        $this->clanky->publish($vals);
-        $this->flashMessage("Vydání článku " . $clanek['titulek'] . " bylo naplánováno.");
-        $this->redirect("default");
-    }
-
-    public function addSouvisejici($form)
-    {
-        if (!$this->getUser()->isAllowed("clanky", "souvisejici")) {
-            $this->flashMessage("Nemáte oprávnění upravovat související články.");
+            $vals = $form->getValues();
+            $this->clanky->addSouvisejici($vals);
             $this->redirect("this");
-        }
-
-        $vals = $form->getValues();
-        $this->clanky->addSouvisejici($vals);
-        $this->redirect("this");
+        };
+        return $form;
     }
 
     public function handleRemoveSouvisejici($clanek_id, $souvisejici_id, $confirmed = false)
