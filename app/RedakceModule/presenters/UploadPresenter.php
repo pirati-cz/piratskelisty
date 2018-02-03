@@ -27,52 +27,50 @@ class UploadPresenter extends BasePresenter
     {
         $form = new Form;
         $form->addUpload('foto', 'Fotografie (max. 2 MB):')
+            ->setRequired("Vyberte prosím fotografii")
 				    ->addRule(Form::MAX_FILE_SIZE, 'Maximální velikost souboru je 2 MB.', 2 * 1024 * 1024 /* v bytech */);
 
         $form->addTextarea("alt", "Popis");
         $form->addTextarea("title", "Titulek");
 
         $form->addSubmit('submit', 'Nahrát');
-        $form->onSuccess[] = callback($this, 'handleSavePhoto');
+        $form->onSuccess[] = function($form)
+        {
+            $vals = $form->getValues();
+            /*
+             * Kontrola, zda-li byl obrazek skutecne nahran
+             */
+            if ($vals['foto']->isOk()) {
+                if (empty($vals['alt'])) {
+                    $vals['alt'] = $vals['foto']->name;
+                }
+                $path_parts = pathinfo($vals['foto']->name);
+                $extension = strtolower($path_parts['extension']);
+
+                $extensions = array("jpg", "jpeg", "png", "pdf", "sla");
+                if (!in_array($extension, $extensions )) {
+                    $this->flashMessage("Nepovolená přípona souboru. Povolené přípony jsou ".implode(", ", $extensions).".");
+                    $this->redirect("this");
+                }
+
+                $vals['extension'] = $extension;
+
+                $upload = $this->upload->save($vals);
+
+                $dir = WWW_DIR . "/upload/";
+
+                $path = $dir . $upload['id'] . "." . $extension;
+
+                $vals['foto']->move($path);
+
+                $this->flashMessage('Soubor byl nahrán.', 'warning');
+
+            } else {
+                $this->flashMessage('Obrázek se nezdařilo nahrát na server.', 'warning');
+            }
+            $this->redirect("this");
+        };
         return $form;
-    }
-
-    public function handleSavePhoto($form)
-    {
-        $vals = $form->getValues();
-        /*
-         * Kontrola, zda-li byl obrazek skutecne nahran
-         */
-        if ($vals['foto']->isOk()) {
-            if (empty($vals['alt'])) {
-                $vals['alt'] = $vals['foto']->name;
-            }
-            $path_parts = pathinfo($vals['foto']->name);
-            $extension = strtolower($path_parts['extension']);
-
-            $extensions = array("jpg", "jpeg", "png", "pdf", "sla");
-            if (!in_array($extension, $extensions )) {
-                $this->flashMessage("Nepovolená přípona souboru. Povolené přípony jsou ".implode(", ", $extensions).".");
-                $this->redirect("this");
-            }
-
-            $vals['extension'] = $extension;
-
-            $upload = $this->upload->save($vals);
-
-            $dir = WWW_DIR . "/upload/";
-
-            $path = $dir . $upload['id'] . "." . $extension;
-
-            $vals['foto']->move($path);
-
-            $this->flashMessage('Soubor byl nahrán.', 'warning');
-            //zpráva pro vypsání
-
-        } else {
-            $this->flashMessage('Obrázek se nezdařilo nahrát na server.', 'warning');
-        }
-        $this->redirect("this");
     }
 
     public function renderDefault()
