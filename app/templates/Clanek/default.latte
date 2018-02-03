@@ -1,10 +1,10 @@
+{var $description = strip_tags($clanek->perex)}
 {block head}
-    {*<meta property="og:url"                content="" />*}
+    <meta property="og:url"                content="{link //this}" />
     <meta property="og:type"               content="article" />
     <meta property="og:title"              content="{$clanek->titulek}" />
     <meta property="og:description"        content="{$description}" n:ifset="$description" />
-    <meta property="og:image"              content="{link //Service:Thumbnail:default 'id' => $clanek->obrazek_id, 'width' => 600, format => jpg}" />
-
+    <meta property="og:image"              content="{link //Service:Thumbnail:default 'id' => $clanek->obrazek_id, format => jpg}" />
 {/block}
 
 {block content}
