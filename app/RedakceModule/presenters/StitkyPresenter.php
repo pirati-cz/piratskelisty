@@ -22,7 +22,7 @@ class StitkyPresenter extends BasePresenter
             $this->clanky->addStitek($vals['stitek']);
             $this->flashMessage("Štítek přidán.");
             $this->redirect("default");
-        }
+        };
         return $form;
     }
 
