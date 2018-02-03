@@ -147,9 +147,9 @@ class ClankyPresenter extends BasePresenter
             $count = count($clanek->stitky);
             $arr = [];
             foreach ($clanek->stitky as $stitek) {
-                $arr[$stitek] = 1;
+                $arr[] = $stitek;
             }
-            $this['clanek']['stitky']->setDefaults($arr);
+            $this['clanek']['stitky']->setDefaultValue($arr);
             unset($clanek->stitky);
             $this['clanek']->setDefaults($clanek);
             $this->template->clanek = $clanek;

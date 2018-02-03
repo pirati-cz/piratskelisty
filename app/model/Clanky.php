@@ -119,13 +119,8 @@ class Clanky extends \Nette\Object
         $this->database->query("INSERT INTO clanky_revize", $arr);
 
         $this->database->query("DELETE FROM clanky_stitky WHERE clanek_id=?;",$id);
-        $stitky = explode("\n", $vals['stitky_text']);
-        foreach ($stitky as $key => $stitek) {
-            if (empty($stitek)) continue;
-            $stitky[$key] = trim($stitek);
-        }
-        $stitky = array_unique($stitky);
-        foreach ($stitky as $stitek) {
+
+        foreach ($vals['stitky'] as $stitek) {
             $this->database->query("INSERT INTO clanky_stitky ", array("clanek_id" => $id, "stitek" => trim($stitek)));
         }
         return $id;
@@ -172,7 +167,7 @@ class Clanky extends \Nette\Object
         $stitky = $this->getStitky();
         $arr = [];
         foreach ($stitky as $stitek) {
-          $arr[$stitek->stitek] = $stitek;
+          $arr[$stitek->stitek] = $stitek->stitek;
         }
         return $arr;
     }
