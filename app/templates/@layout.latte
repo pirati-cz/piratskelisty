@@ -1,0 +1,190 @@
+{**
+ * My Application layout template.
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="{$description}" n:ifset="$description">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+	<title>{ifset $title}{$title|striptags|truncate:100} - Pirátské listy{else}{block title|striptags}Pirátské listy{/block}{/ifset}</title>
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/default.css">
+    <link rel="stylesheet" media="screen and (max-width: 1000px)" href="{$basePath}/css/tablet.css">
+    <link rel="stylesheet" media="screen and (max-width: 500px)" href="{$basePath}/css/mobile.css">
+	<link rel="stylesheet" media="screen and (min-width: 1001px)" href="{$basePath}/css/screen.css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	<link rel="alternate" title="Pirátské listy - Články" n:href=":Rss:default" type="application/rss+xml" />
+    <link rel="alternate" title="Pirátské listy - Aktuality" n:href=":Rss:aktuality" type="application/rss+xml" />
+	{block head}{/block}
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+	    var u="//piwik.pirati.cz/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', '4']);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<!-- End Piwik Code -->
+</head>
+
+<body>
+	<script> document.documentElement.className+=' js' </script>
+	<div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/cs_CZ/all.js#xfbml=1&status=0&appId=822104197818729";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div id="main">
+    <div id="header">
+    <a id="logo" n:href=":Homepage:"><img src="{$basePath}/images/logo.png" alt="Pirátské listy" /></a>
+
+    {form hledani}
+        {input keyword}
+    {/form}
+    {if $user->isLoggedIn()}
+    <div class="redakce">
+        {if $user->isAllowed("spravci", "zobrazit")}
+            <a n:href=":Redakce:Spravce:">Správa</a>
+        {/if}
+        {if $user->isAllowed("clanky", "zobrazit")}
+            <a n:href=":Redakce:Clanky:">Články</a>
+        {/if}
+        {if $user->isAllowed("soubory", "zobrazit")}
+            <a n:href=":Redakce:Upload:">Soubory</a>
+        {/if}
+        <a n:href=":Redakce:Stitky:">Štítky</a>
+        <a n:href=":Sign:out">Odhlásit se</a>
+    </div>
+    {/if}
+    <div id="menu">
+        <img src="{$basePath}/images/menu.png" alt="menu" id="menu_button" />
+ <div class="menu">
+    {foreach $kategorie as $k}
+    <div class="{if $iterator->getCounter()!=7}menu_item{else}menu_archiv{/if} bg{$k->barva}">
+        <a n:href=":Homepage:default url => $k->url">{$k->nazev}</a>
+    </div>
+    {/foreach}
+    </div>
+
+    </div>
+    </div>
+    <div class="menu">
+    {foreach $kategorie as $k}
+    <div class="{if $iterator->getCounter()!=7}menu_item{else}menu_archiv{/if} bg{$k->barva}">
+        <a n:href=":Homepage:default url => $k->url">{$k->nazev}</a>
+    </div>
+    {/foreach}
+    </div>
+    <div class="clear"></div>
+	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+    {block full}
+    <div id="main_article">
+    {block hlavni}
+
+    {/block}
+    </div>
+    <div id="left_column">
+	{include content}
+    </div>
+    <div id="right_column">
+                       <div id="icons">
+                            <a href="https://www.facebook.com/piratskelisty" target="_blank" ><img src="{$basePath}/images/icons/fb.png" alt="Facebook Pirátské listy"></a>
+                            <a href="https://twitter.com/Piratske_listy" target="_blank"><img src="{$basePath}/images/icons/twitter.png" alt="Twitter Pirátské listy"></a>
+                            <a n:href=":Homepage:redakce"><img src="{$basePath}/images/icons/redakce.png" alt="Redakce Pirátských listů"></a>
+                            <a href="https://pirati.cz" target="_blank"><img src="{$basePath}/images/icons/pirati.png" alt="Česká pirátská strana"></a>
+                            {*<a n:href=":Homepage:kalendar"><img src="{$basePath}/images/icons/kalendar.png" alt="Kalendář Pirátských listů"></a>*}
+
+                        </div>
+    {*}div class="smaller">Propaganda</div>*}
+    {*
+    <a n:href=":Homepage:podpora" >
+    <img src="{$basePath}/images/podpora.png" alt="Podpořte Pirátské listy" />
+    </a>
+*}
+
+    {if !empty($aktuality)}
+    <div class="aktuality">
+        <h2><a n:href=":Homepage:default 'url' => 'aktuality'">Aktuality</a></h2>
+        {foreach $aktuality as $aktualita}
+            <div class="aktualita">
+                <span class="datum">{$aktualita->datum_vydani|date:"d.m.Y H.i"}</span><br />
+                <a n:href=":Clanek:default $aktualita->id, Nette\Utils\Strings::webalize($aktualita['titulek'])">{$aktualita->titulek}</a>
+            </div>
+        {/foreach}
+    </div>
+    {/if}
+
+
+    {if !empty($pozvanky)}
+    <div class="pozvanky">
+        <h2>Pozvánky</h2>
+    </div>
+    {/if}
+
+    {if !empty($anketa)}
+    <div class="anketa">
+        <h2>Anketa</h2>
+    </div>
+    {/if}
+
+</div>
+    {/block}
+
+
+    <div class="clear"></div>
+
+        <div class="menu menu2">
+    {foreach $kategorie as $k}
+    <div class="{if $iterator->getCounter()!=7}menu_item{else}menu_archiv{/if} bg{$k->barva}">
+        <a n:href=":Homepage:default url => $k->url">{$k->nazev}</a>
+    </div>
+    {/foreach}
+
+
+
+        </div>
+        <div id="paticka">
+            <a n:href=":Homepage:redakce">Redakce</a> |
+            <a n:href=":Homepage:kontakt">Kontakt</a> |
+            <a href="https://pirati.cz" target="_blank">Piráti</a> |
+            <a href="https://www.facebook.com/piratskelisty" target="_blank">Facebook</a> |
+            <a href="https://twitter.com/Piratske_listy" target="_blank">Twitter</a> |
+            <a n:href=":Rss:default">RSS články</a> |
+            <a n:href=":Rss:aktuality">RSS aktuality</a>
+
+            <p>Copyleft Pirátské listy. Publikování nebo další šíření obsahu serveru Pirátské listy je umožněno i bez písemného souhlasu. Všechna práva vyhlazena.</p>
+        </div>
+
+
+    	<script src="{$basePath}/js/jquery.min.js"></script>
+    	<script src="{$basePath}/js/netteForms.js"></script>
+    	<script src="{$basePath}/js/main.js"></script>
+    	<script src="{$basePath}/js/jquery.nette.js"></script>
+
+	{block scripts}
+
+
+	{/block}
+
+</body>
+</html>

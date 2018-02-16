@@ -1,0 +1,24 @@
+{block content}
+<h1>Evidence lobbistických kontaktů</h1>
+    {snippet lobs}
+        {foreach $lobs as $lob}
+            <div class="post">
+                <div>
+                    <strong>{$lob->author}</strong>
+                    {$lob->datestring}
+                </div>
+                <div>
+                    {$lob->content|noescape}
+                </div>
+            </div>
+        {/foreach}
+    {/snippet}
+    
+    {snippet dalsi}
+    {if !empty($lobs)}
+        <a n:href="default, 'offset' => $next_offset, 'limit' => $limit" class="ajax">zobrazit dalších {$limit} záznamů</a>
+        {else}
+        <p>V evidenci nejsou další záznamy.</p>
+        {/if}
+    {/snippet}
+{/block}

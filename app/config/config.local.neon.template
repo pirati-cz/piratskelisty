@@ -1,0 +1,12 @@
+parameters:
+
+
+database:
+	dsn: 'mysql:host=127.0.0.1;dbname=listy'
+	user: 
+	password: 
+
+	options:
+		lazy: yes
+tracy:
+	email: 

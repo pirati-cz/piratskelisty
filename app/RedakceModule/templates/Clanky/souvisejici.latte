@@ -1,0 +1,35 @@
+{block full}
+<h1>Související články k {$clanek->titulek}</h1>
+<a n:href="default">všechny články</a>
+{if $user->isAllowed("clanky") || ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani))}
+    <a n:href="upravit $clanek->id">úprava článku</a>
+{/if}
+<table>
+<tr n:foreach="$clanky as $c">
+<tr>
+<td>{$c->titulek}</td>
+<td>
+{if $user->isAllowed("clanky", "souvisejici")}
+    <a n:href="removeSouvisejici! $clanek->id, $c->id" class="confirm">odebrat</a>
+{/if}
+</td></tr>
+</tr>
+</table>
+{if $user->isAllowed("clanky", "souvisejici")}
+    {control souvisejici}
+{/if}
+
+{/block}
+
+
+{block head}
+  <link href="{$basePath}/js/select2/css/select2.min.css" rel="stylesheet" />
+{/block}
+{block scripts}
+  <script src="{$basePath}/js/select2/js/select2.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      $('select[name=souvisejici_id]').select2();
+    });
+  </script>
+{/block}

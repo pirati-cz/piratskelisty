@@ -1,0 +1,20 @@
+{extends none}
+{contentType text/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>{$channel->title}</title>
+    <link>{$channel->link}</link>
+    <description>{$channel->description}</description>
+
+    {foreach $items as $item}
+    <item>
+        <title>{$item->title}</title>
+        <link>{$item->link}</link>
+        <guid>{$item->link}</guid>
+        <description>{$item->description}</description>
+        <pubDate>{php echo gmdate("D, d M Y H:i:s", $item->pub_date->getTimestamp())." GMT"; }</pubDate>
+    </item>
+    {/foreach}
+</channel>
+</rss>

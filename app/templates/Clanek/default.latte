@@ -1,0 +1,122 @@
+{var $description = strip_tags($clanek->perex)}
+{block head}
+    <meta property="og:url"                content="{link //this}" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              content="{$clanek->titulek}" />
+    <meta property="og:description"        content="{$description}" n:ifset="$description" />
+    <meta property="og:image"              content="{link //Service:Thumbnail:default 'id' => $clanek->obrazek_id, format => jpg}" />
+{/block}
+
+{block content}
+
+<div class="clanek">
+<div class="color{$clanek->kategorie_id} kategorie_mala">{$clanek->kategorie}</div>
+<h1>{$clanek->titulek}</h1>
+<div class="datum_diskuze" >{$clanek->datum_vydani|date:"%d. %m. %Y"}
+{if !empty($clanek->komentaru)}| {$clanek['komentaru']} komentářů{/if}
+</div>
+<div class="fb-like fb-like-top" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+<p>{$clanek->perex|noescape}</p>
+{if !empty($clanek->obrazek_id)}
+<img class="hlavni" src="{link Service:Thumbnail:default 'id' => $clanek->obrazek_id, 'width' => 600, format => jpg}" alt="{$clanek->alt}" title="{$clanek->title}" width="600"/>
+{/if}
+<div class="clear">
+{$clanek->text|noescape}
+<div class="fb-like fb-like-top" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+{if !empty($clanek->autor)}
+<p>
+<strong>Autor:</strong> {$clanek->autor}
+</p>
+{/if}
+{if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
+    <div class="redakce-dole">
+        <a n:href=":Redakce:Clanky:upravit $clanek->id">Upravit</a>
+    </div>
+{/if}
+
+{*<p>
+<strong>Přečteno:</strong> {$clanek->precteno}x
+</p>*}
+{if !empty($clanek->stitky)}
+<p class="stitky">
+<strong>Štítky:</strong> {foreach $clanek->stitky as $stitek}<a n:href="Homepage:default stitek => $stitek">#{$stitek}</a> {/foreach}
+</p>
+{/if}
+
+{if !empty($skupina)}
+<h3>Související články</h3>
+{foreach $skupina as $c}
+{php if ($c->id==$clanek->id) continue;}
+<ul>
+<li><a n:href="default, $c->id, Nette\Utils\Strings::webalize($c['titulek'])">{$c->titulek}</a></li>
+</ul>
+{/foreach}
+{/if}
+
+
+<h3 id="komentare" >Komentáře k článku</h3>
+{snippet pridej_komentar}
+{if empty($pridej_komentar)}
+<a n:href="komentuj!" class="ajax" >přidat komentář</a>
+{else}
+{control komentar}
+<script type="text/javascript">
+$(function() {
+	$('#frm-komentar input[name=skryte]').val("asdf");
+});
+</script>
+{/if}
+{/snippet}
+
+{snippet komentare}
+{if empty($komentare)}
+<p>Dosud nebyly vloženy žádné komentáře.</p>
+{else}
+{foreach $komentare as $komentar}
+<div class="komentar_header">
+<strong>{$komentar['jmeno']}</strong>
+{$komentar['datum']|date:"d.m.Y H:i"}
+</div>
+<p>
+{$komentar['text']|breaklines}
+</p>
+{/foreach}
+
+{/if}
+{/snippet}
+
+
+</div>
+</div>
+
+
+{/block}
+
+{block scripts}
+<script type="text/javascript">
+// po načtení stránky
+$(function () {
+form = $('#frm-komentar');
+
+    $(document).on('click','#frm-komentar :submit', function(event) {
+$.ajax( {
+      type: "POST",
+      url: $(this).parents('#frm-komentar').attr( 'action' ),
+      data:  $(this).parents('#frm-komentar').serialize(),
+
+    } );                return false;
+    });
+    $(document).on('submit','#frm-komentar', function(event) {
+$.ajax( {
+      type: "POST",
+      url: form.attr( 'action' ),
+      data:  form.serialize(),
+
+    } );                   return false;
+    });
+
+});
+</script>
+{/block}

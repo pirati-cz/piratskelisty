@@ -1,0 +1,8 @@
+{block full}
+<h1>Správa uživatelů</h1>
+<table>
+{foreach $uzivatele as $uzivatel}
+<tr><td>{$uzivatel->jmeno}</td><td><a n:href="role $uzivatel->id">Oprávnění</a></td></tr>
+{/foreach}
+</table>
+{/block}

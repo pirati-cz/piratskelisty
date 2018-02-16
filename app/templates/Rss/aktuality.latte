@@ -1,0 +1,22 @@
+{extends none}
+{contentType text/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>Pirátské listy - Aktuality</title>
+    <link>{link //Homepage:default url => "aktuality"}</link>
+    <description>Aktuality z Pirátských listů.</description>
+
+    {foreach $clanky as $clanek}
+    <item>
+        <title>{$clanek->titulek}</title>
+        <link>{link //Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}</link>
+        <guid>{link //Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}</guid>
+        <description>{$clanek->perex|stripTags}</description>
+        <category>{$clanek->kategorie}</category>
+        <comments>{link //Clanek:default $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])}#komentare</comments>
+        <pubDate>{php echo gmdate("D, d M Y H:i:s", $clanek->datum_vydani->getTimestamp())." GMT"; }</pubDate>
+    </item>
+    {/foreach}
+</channel>
+</rss>

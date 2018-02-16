@@ -243,3 +243,14 @@ table.admin tr:hover td {
 #main_article {
     margin-bottom:40px;
 }
+
+blockquote {
+    background-color: #EBEADD;
+    border: 1px solid #DBDBCE;
+    padding:10px;
+}
+.post {
+    border-bottom: 1px solid #DBDBCE;
+    margin-bottom:25px;
+    padding-bottom:25px;
+}

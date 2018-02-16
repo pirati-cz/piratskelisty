@@ -1,0 +1,61 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+
+
+
+php:
+	date.timezone: Europe/Prague
+	# zlib.output_compression: yes
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+session:
+	expiration: 14 days
+
+
+services:
+	- App\RouterFactory
+	- Models\Uzivatele
+	- Models\Kategorie
+	- Models\Clanky
+	- Models\Komentare
+	- Models\Upload
+	- Models\Rss
+
+	router: @App\RouterFactory::createRouter
+
+	authorizator:
+		class: Nette\Security\Permission
+		setup:
+			- addRole('guest')
+			- addRole('authenticated')
+			- addRole('clen_tymu')
+			- addRole('spravce')
+			- addRole('autor', 'clen_tymu')
+			- addRole('redaktor', 'clen_tymu')
+
+			- addResource('spravci')
+			- addResource('clanky')
+			- addResource('soubory')
+			- addResource('stitky')
+			- addResource('skupiny')
+
+
+			- allow('spravce', 'spravci')
+			- allow('redaktor', 'clanky')
+			- allow('autor', 'clanky', 'upravit_nevydany')
+			- allow('clen_tymu', 'clanky', 'zobrazit')
+			- allow('clen_tymu', 'soubory')
+			- allow('clen_tymu', 'stitky')
+			- allow('clen_tymu', 'skupiny')
+
+

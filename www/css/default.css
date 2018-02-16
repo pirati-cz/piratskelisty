@@ -204,6 +204,10 @@ html.js .jshidden {
 .clear, .clb {
     clear: both;
 }
+select, input[type=text], textarea {
+    width:100%;
+}
+
 /* ------- Rojovy styly ---------- */
 .clanek a,.clanek a:link,.clanek a:visited {color:#00b;}
 .clanek a:hover {color:#aaf;background:#002;}
@@ -220,7 +224,7 @@ html.js .jshidden {
 .cll {clear:left;}
 
 abbr, acronym {cursor: help;}
-em.fix {background-color:#efb, color:#000;}
+em.fix {background-color:#efb; color:#000;}
 span.ex {font-weight:bold; color:#a00;}
 
 /* --tabulka -- */

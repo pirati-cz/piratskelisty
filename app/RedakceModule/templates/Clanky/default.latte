@@ -1,0 +1,38 @@
+{block full}
+<h1>Články</h1>
+<a n:href="upravit">Nový článek</a>
+<table class="admin">
+{foreach $clanky as $clanek}
+<tr>
+<td>{$clanek->titulek|truncate:100}</td>
+<td>
+    {if ($user->isAllowed("clanky", "upravit_nevydany") && empty($clanek->datum_vydani)) || $user->isAllowed("clanky", "upravit_vydany")}
+        <a n:href="upravit $clanek->id">upravit</a>
+    {/if}
+ </td>
+<td>
+    <a n:href="souvisejici, $clanek->id">související</a>
+</td>
+<td>
+{if $user->isAllowed("clanky", "vydat")}
+    <a n:href="vydat $clanek->id">
+    {if empty($clanek->datum_vydani)}
+    vydat
+    {else}
+    {$clanek->datum_vydani|date:"d.m.Y H:i"}
+    {/if}
+    </a>
+{else}
+{if !empty($clanek->datum_vydani)}{$clanek->datum_vydani|date:"d.m.Y H:i"}{else}zatím nevydáno{/if}
+{/if}
+</td>
+<td><a n:href=":Clanek:default, $clanek->id, Nette\Utils\Strings::webalize($clanek['titulek'])">náhled</a></td>
+<td>
+{if $user->isAllowed("clanky", "smazat")}
+    <a n:href="smazat! $clanek->id" class="confirm" >smazat</a>
+{/if}
+</td>
+</tr>
+{/foreach}
+</table>
+{/block}

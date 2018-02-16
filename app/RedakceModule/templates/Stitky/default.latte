@@ -1,0 +1,6 @@
+{block content}
+  <a n:href="new">Nový štítek</a>
+  <ul>
+    <li n:foreach="$stitky as $stitek"><a n:href=":Homepage:default, stitek => $stitek['stitek']">{$stitek['stitek']}</a></li>
+  </ul>
+{/block}
