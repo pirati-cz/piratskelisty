@@ -41,7 +41,7 @@ class ClankyPresenter extends BasePresenter
             ->setRequired("Vyplňte prosím autora článku")
             ->addRule(Form::MAX_LENGTH, "Autor je příliš dlouhý", 64);
 
-        $form->addSelect("kategorie_id", "Kategorie", $this->kategorie->getPairs());
+        $form->addSelect("kategorie_id", "Kategorie", $this->kategorie->getPairs())->setDefaulValue(8);
         $form->addTextArea("perex", "Perex");
         $form->addSelect("obrazek_id", "Obrázek", $this->upload->getPairs())->setPrompt("-- bez obrázku --");
         $form->addTextArea("text", "Text");
