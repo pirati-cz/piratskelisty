@@ -22,11 +22,15 @@ class Upload extends \Nette\Object
         return $this->database->fetch("SELECT * FROM upload WHERE id = ?;",$id);
 }
     public function getPairs() {
-        
+
         return $this->database->fetchPairs("SELECT id, alt from upload order by id desc;");
     }
     public function getAll() {
-        return $this->database->fetchAll("SELECT * FROM upload order by id desc;");
+        return $this->database->fetchAll("SELECT u.*,count(cl.id) as pocet
+            FROM upload u
+            left join clanky cl ON (u.id = cl.obrazek_id)
+            group by u.id
+            order by u.id desc;");
     }
     public function getImages() {
         return $this->database->fetchAll("SELECT * FROM upload
@@ -48,4 +52,7 @@ class Upload extends \Nette\Object
 			return $this->get($this->database->getInsertId());
 		}
 	}
+  public function remove($id) {
+    $this->database->query("DELETE FROM upload WHERE id=?;",$id);
+  }
 }

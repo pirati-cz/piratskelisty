@@ -77,4 +77,15 @@ class UploadPresenter extends BasePresenter
     {
         $this->template->upload = $this->upload->getAll();
     }
+
+    public function handleDelete($id, $confirmed=false) {
+        if ($confirmed) {
+            $file = $this->upload->get($id);
+            $dir = WWW_DIR . "/upload/";
+            $path = $dir . $file->id . "." . $file->extension;
+            unlink($path);
+            $this->upload->remove($id);
+            $this->redirect("Soubor smazán.");
+        }
+    }
 }

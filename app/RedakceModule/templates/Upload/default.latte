@@ -6,6 +6,9 @@
 <td><a href="{$basePath}/upload/{$foto->id}.{$foto->extension}" target="_blank">{$foto->alt|truncate:30}</a></td>
 {*<td><a href="{link :Service:Thumbnail:default, id => $foto['id'], height => 70, format => "jpg"}">h70</a>
 </td>*}
+{if $user->isAllowed("upload", "smazat")}
+    <a n:href="smazat! $foto->id" class="confirm" >smazat</a>
+{/if}
 </tr>
 </table>
 {/block}
