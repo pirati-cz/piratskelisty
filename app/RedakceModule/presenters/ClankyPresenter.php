@@ -78,6 +78,7 @@ class ClankyPresenter extends BasePresenter
         $form->addDatePicker("datum_vydani", "Datum vydání")
             ->setDefaultValue(date("d.m.Y"));
         $form->addText("cas_vydani", "Čas vydání")
+            ->setRequired("Zadejte prosím čas vydání.")
             ->addRule(Form::PATTERN, "Zadejte prosím platný čas vydání.", "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
             ->setDefaultValue(date("H:i"));
 
