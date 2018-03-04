@@ -73,9 +73,11 @@ class UploadPresenter extends BasePresenter
         return $form;
     }
 
-    public function renderDefault()
+    public function renderDefault($limit=100, $offset=0)
     {
-        $this->template->upload = $this->upload->getAll();
+        $this->template->upload = $this->upload->getAll($limit, $offset);
+	$this->template->prev = $offset-$limit;
+	$this->template->next = $offset+$limit;
     }
 
     public function handleSmazat($id, $confirmed=false) {

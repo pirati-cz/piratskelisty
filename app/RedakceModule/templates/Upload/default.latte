@@ -22,4 +22,7 @@
       </td>
     </tr>
   </table>
+
+  <a n:if="$prev>0" n:href="default offset => $prev">předchozí soubory</a>
+  <a n:if="!empty($upload)" n:href="default offset => $next">další soubory</a>
 {/block}
