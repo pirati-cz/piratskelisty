@@ -85,7 +85,8 @@ class UploadPresenter extends BasePresenter
             $path = $dir . $file->id . "." . $file->extension;
             unlink($path);
             $this->upload->remove($id);
-            $this->redirect("Soubor smazán.");
+            $this->flashMessage("Soubor smazán.");
+            $this->redirect("this");
         }
     }
 }
