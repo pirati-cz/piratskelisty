@@ -78,7 +78,7 @@ class UploadPresenter extends BasePresenter
         $this->template->upload = $this->upload->getAll();
     }
 
-    public function handleDelete($id, $confirmed=false) {
+    public function handleSmazat($id, $confirmed=false) {
         if ($confirmed) {
             $file = $this->upload->get($id);
             $dir = WWW_DIR . "/upload/";
