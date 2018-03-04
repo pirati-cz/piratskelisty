@@ -2,11 +2,21 @@
   {control upload}
 
   <table>
+    <tr>
+      <th>Název</th>
+      <th>Použito</th>
+      <th>Akce</th>
+    </tr>
     <tr n:foreach="$upload as $foto">
-      <td><a href="{$basePath}/upload/{$foto->id}.{$foto->extension}" target="_blank">{$foto->alt|truncate:30}</a></td>
+      <td>
+        <a href="{$basePath}/upload/{$foto->id}.{$foto->extension}" target="_blank">{$foto->alt|truncate:30}</a>
+      </td>
+      <td>
+        {$foto->pocet}
+      </td>
       <td>
         {if $user->isAllowed("upload", "smazat")}
-            <a n:href="smazat! $foto->id" class="confirm" >smazat</a>
+            <a n:if="$foto->pocet>0" n:href="smazat! $foto->id" class="confirm" >smazat</a>
         {/if}
       </td>
     </tr>
