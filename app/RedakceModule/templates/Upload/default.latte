@@ -16,7 +16,7 @@
       </td>
       <td>
         {if $user->isAllowed("upload", "smazat")}
-            <a n:if="$foto->pocet>0" n:href="smazat! $foto->id" class="confirm" >smazat</a>
+            <a n:if="$foto->pocet==0" n:href="smazat! $foto->id" class="confirm" >smazat</a>
         {/if}
       </td>
     </tr>
