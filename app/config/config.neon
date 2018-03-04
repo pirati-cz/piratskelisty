@@ -48,11 +48,11 @@ services:
 			- addResource('soubory')
 			- addResource('stitky')
 			- addResource('skupiny')
-      - addResource('upload')
+			- addResource('upload')
 
 
 			- allow('spravce', 'spravci')
-      - allow('spravce', 'upload', 'smazat')
+			- allow('spravce', 'upload', 'smazat')
 			- allow('redaktor', 'clanky')
 			- allow('autor', 'clanky', 'upravit_nevydany')
 			- allow('clen_tymu', 'clanky', 'zobrazit')
