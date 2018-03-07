@@ -10,7 +10,7 @@
     <tr n:foreach="$upload as $foto">
       <td>
         <div><a href="{$basePath}/upload/{$foto->id}.{$foto->extension}" target="_blank">{$foto->alt|truncate:30}</a></div>
-	<img class="hlavni" src="{link :Service:Thumbnail:default 'id' => $foto->id, 'height' => 60, format => jpg}" alt="{$clanek->alt}" title="{$clanek->title}" height="60"/>
+	<img class="hlavni" src="{link :Service:Thumbnail:default 'id' => $foto->id, 'height' => 60, format => jpg}" alt="{$foto->alt}" height="60"/>
       </td>
       <td>
         {$foto->pocet}
