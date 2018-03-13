@@ -43,11 +43,13 @@ class ClankyPresenter extends BasePresenter
 
         $form->addSelect("kategorie_id", "Kategorie", $this->kategorie->getPairs())->setDefaultValue(8);
         $form->addTextArea("perex", "Perex");
-        $form->addSelect("obrazek_id", "Obrázek", $this->upload->getPairs())->setPrompt("-- bez obrázku --");
+        $form->addSelect("obrazek_id", "Obrázek",         $this->upload->getPairs())
+            ->setPrompt("-- bez obrázku --")
+            ->getControlPrototype()->class('obrazek_id');
         $form->addTextArea("text", "Text");
 
         $form->addMultiSelect("stitky", "Štítky", $this->clanky->getStitkyPairs())
-            ->getControlPrototype()->class('stitky');;
+            ->getControlPrototype()->class('stitky');
         $form->addText("skupina", "Skupina");
         $form->addSubmit("save", "Uložit");
         $form->onSuccess[] = function(Form $form)
