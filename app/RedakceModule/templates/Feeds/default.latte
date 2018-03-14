@@ -1,0 +1,19 @@
+{block content}
+  <h1>Skupiny feedů</h1>
+  <a n:href="editGroup">nová skupina feedů</a>
+  <table class="table">
+    <tr>
+      <th>Název</th>
+      <th>URL</th>
+      <th>Akce</th>
+    </tr>
+    <tr n:foreach="$groups as $group">
+      <th><a n:href=":Feeds:default $group->url">{$group->name}</a></th>
+      <td>{$group->url}</td>
+      <td>
+        <a n:href="editGroup $group->id">upravit</a>
+        <a n:href="detail $group->id">spravovat</a>
+      </td>
+    </tr>
+  </table>
+{/block}

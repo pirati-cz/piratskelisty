@@ -1,0 +1,8 @@
+{block content}
+  {if empty($group)}
+    <h1>Nová skupina feedů</h1>
+  {else}
+    <h1>{$group->name}</h1>
+  {/if}
+  {control group}
+{/block}

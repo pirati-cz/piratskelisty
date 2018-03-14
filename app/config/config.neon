@@ -30,6 +30,8 @@ services:
 	- Models\Komentare
 	- Models\Upload
 	- Models\Rss
+	- Models\Feeds
+	- Models\FeedGroups
 
 	router: @App\RouterFactory::createRouter
 
@@ -49,6 +51,7 @@ services:
 			- addResource('stitky')
 			- addResource('skupiny')
 			- addResource('upload')
+			- addResource('feeds')
 
 
 			- allow('spravce', 'spravci')
@@ -59,3 +62,4 @@ services:
 			- allow('clen_tymu', 'soubory')
 			- allow('clen_tymu', 'stitky')
 			- allow('clen_tymu', 'skupiny')
+			- allow('redaktor', 'feeds')

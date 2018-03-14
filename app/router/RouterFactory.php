@@ -47,6 +47,7 @@ class RouterFactory
 
 	    $router[] = new Route('fbfeed',array("presenter" => "FB", "action" => "default"));
 	    $router[] = new Route('fbfeed/kraje',array("presenter" => "FB", "action" => "kraje"));
+	    $router[] = new Route('feeds/<url>',array("presenter" => "Feeds", "action" => "default"));
 
 		$router[] = new Route('<presenter>/<action>[/<id>]', "Homepage:default");
 

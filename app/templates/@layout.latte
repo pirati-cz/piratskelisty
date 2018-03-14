@@ -63,16 +63,19 @@
     {/form}
     {if $user->isLoggedIn()}
     <div class="redakce">
-        {if $user->isAllowed("spravci", "zobrazit")}
-            <a n:href=":Redakce:Spravce:">Správa</a>
-        {/if}
         {if $user->isAllowed("clanky", "zobrazit")}
             <a n:href=":Redakce:Clanky:">Články</a>
         {/if}
         {if $user->isAllowed("soubory", "zobrazit")}
             <a n:href=":Redakce:Upload:">Soubory</a>
         {/if}
+        {if $user->isAllowed("feeds", "zobrazit")}
+            <a n:href=":Redakce:Feeds:">Feeds</a>
+        {/if}
         <a n:href=":Redakce:Stitky:">Štítky</a>
+        {if $user->isAllowed("spravci", "zobrazit")}
+            <a n:href=":Redakce:Spravce:">Správa</a>
+        {/if}
         <a n:href=":Sign:out">Odhlásit se</a>
     </div>
     {/if}

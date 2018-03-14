@@ -1,0 +1,16 @@
+{block content}
+  <h1>{$group->name}</h1>
+  <a n:href="editFeed $group->id">nový feed</a>
+  <table>
+    <tr>
+      <th>Název</th>
+      <th>URL</th>
+      <th>Akce</th>
+    </tr>
+    <tr n:foreach="$feeds as $feed">
+      <th>{$feed->name}</th>
+      <td>{$feed->url}</td>
+      <td><a n:href="deleteFeed! $feed->id" class="confirm" >smazat</a></td>
+    </tr>
+  </table>
+{/block}

@@ -1,0 +1,8 @@
+{block content}
+  {if empty($feed)}
+    <h1>Nový feed</h1>
+  {else}
+    <h1>{$feed->name}</h1>
+  {/if}
+  {control feed}
+{/block}
