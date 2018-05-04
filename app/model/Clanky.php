@@ -107,7 +107,7 @@ class Clanky extends \Nette\Object
                      );
         if (!empty($vals['top'])) {
             $arr['top'] = 1;
-            $this->database->query("UPDATE clanky SET top=0;")
+            $this->database->query("UPDATE clanky SET top=0;");
         }
         if (!empty($vals['skupina'])) {
             $arr['skupina'] = $vals['skupina'];
