@@ -52,7 +52,8 @@ class Clanky extends \Nette\Object
                                                    WHERE datum_vydani IS NOT NULL AND datum_vydani<=STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s') AND c.smazano=0
                                                     ";
         $query2 = " GROUP BY c.id
-                                                   ORDER BY datum_vydani DESC
+                                                   ORDER BY
+                                                   top DESC, datum_vydani DESC
                                                    LIMIT ? OFFSET ?;";
         if ($aktuality) {
             return $this->database->fetchAll($query1."AND k.url='aktuality' AND k.url=?".$query2
@@ -104,6 +105,10 @@ class Clanky extends \Nette\Object
                      "kategorie_id" => $vals['kategorie_id'],
                      "obrazek_id" => $vals['obrazek_id']
                      );
+        if (!empty($vals['top'])) {
+            $arr['top'] = 1;
+            $this->database->query("UPDATE clanky SET top=0;")
+        }
         if (!empty($vals['skupina'])) {
             $arr['skupina'] = $vals['skupina'];
         }
