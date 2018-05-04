@@ -51,7 +51,7 @@ class ClankyPresenter extends BasePresenter
         $form->addMultiSelect("stitky", "Štítky", $this->clanky->getStitkyPairs())
             ->getControlPrototype()->class('stitky');
         $form->addText("skupina", "Skupina");
-        $form->addText("top", "Top");
+        $form->addCheckbox("top", "Top");
         $form->addSubmit("save", "Uložit");
         $form->onSuccess[] = function(Form $form)
         {
