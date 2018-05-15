@@ -15,16 +15,18 @@
 <div class="datum_diskuze" >{$clanek->datum_vydani|date:"%d. %m. %Y"}
 {if !empty($clanek->komentaru)}| {$clanek['komentaru']} komentářů{/if}
 </div>
-<a href="https://www.facebook.com/sharer/sharer.php?u={link //this|url}" target="_blank"><i class="fa fa-facebook fa-fw fa-lg"></i>Sdílet na Facebooku</a>
-<a href="https://twitter.com/intent/tweet?text={link //this|url}" target="_blank" ><i class="fa fa-twitter fa-fw fa-lg"></i>Tweet</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u={link //this|url}" target="_blank" class="link-fb"><i class="fa fa-facebook fa-fw fa-lg"></i>Sdílet na Facebooku</a>
+<a href="https://twitter.com/intent/tweet?text={link //this|url}" target="_blank" class="link-twitter"><i class="fa fa-twitter fa-fw fa-lg"></i>Tweet</a>
+<div class="clear"></div>
 <p>{$clanek->perex|noescape}</p>
 {if !empty($clanek->obrazek_id)}
 <img class="hlavni" src="{link Service:Thumbnail:default 'id' => $clanek->obrazek_id, 'width' => 600, format => jpg}" alt="{$clanek->alt}" title="{$clanek->title}" width="600"/>
 {/if}
 <div class="clear">
 {$clanek->text|noescape}
-<a href="https://www.facebook.com/sharer/sharer.php?u={link //this|url}" target="_blank"><i class="fa fa-facebook fa-fw fa-lg"></i>Sdílet na Facebooku</a>
-<a href="https://twitter.com/intent/tweet?text={link //this|url}" target="_blank" ><i class="fa fa-twitter fa-fw fa-lg"></i>Tweet</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u={link //this|url}" target="_blank" class="link-fb"><i class="fa fa-facebook fa-fw fa-lg"></i>Sdílet na Facebooku</a>
+<a href="https://twitter.com/intent/tweet?text={link //this|url}" target="_blank" class="link-twitter"><i class="fa fa-twitter fa-fw fa-lg"></i>Tweet</a>
+<div class="clear"></div>
 {if !empty($clanek->autor)}
 <p>
 <strong>Autor:</strong> {$clanek->autor}

@@ -207,7 +207,25 @@ html.js .jshidden {
 select, input[type=text], textarea {
     width:100%;
 }
-
+a.link-fb {
+    color: #FFF;
+    display: block;
+    background: #3E5991;
+    float: left;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+a.link-twitter {
+    display: block;
+    background: #1B92DB;
+    float: left;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+}
 /* ------- Rojovy styly ---------- */
 .clanek a,.clanek a:link,.clanek a:visited {color:#00b;}
 .clanek a:hover {color:#aaf;background:#002;}
