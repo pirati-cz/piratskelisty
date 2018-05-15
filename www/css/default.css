@@ -207,7 +207,7 @@ html.js .jshidden {
 select, input[type=text], textarea {
     width:100%;
 }
-a.link-fb {
+.clanek a.link-fb {
     color: #FFF;
     display: block;
     background: #3E5991;
@@ -217,7 +217,7 @@ a.link-fb {
     border-radius: 5px;
     text-decoration: none;
 }
-a.link-twitter {
+.clanek a.link-twitter {
     display: block;
     background: #1B92DB;
     float: left;
