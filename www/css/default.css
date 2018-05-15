@@ -207,8 +207,8 @@ html.js .jshidden {
 select, input[type=text], textarea {
     width:100%;
 }
-.clanek a.link-fb:link
-.clanek a.link-fb:visited
+.clanek a.link-fb:link,
+.clanek a.link-fb:visited,
 .clanek a.link-fb:hover {
     color: #FFF;
     display: block;
@@ -219,9 +219,10 @@ select, input[type=text], textarea {
     border-radius: 5px;
     text-decoration: none;
 }
-.clanek a.link-twitter:link
-.clanek a.link-twitter:visited
+.clanek a.link-twitter:link,
+.clanek a.link-twitter:visited,
 .clanek a.link-twitter:hover {
+    color: #FFF;
     display: block;
     background: #1B92DB;
     float: left;
