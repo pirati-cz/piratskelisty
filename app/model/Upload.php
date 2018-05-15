@@ -25,12 +25,13 @@ class Upload extends \Nette\Object
 
         return $this->database->fetchPairs("SELECT id, alt from upload order by id desc;");
     }
-    public function getAll() {
+    public function getAll($limit, $offset) {
         return $this->database->fetchAll("SELECT u.*,count(cl.id) as pocet
             FROM upload u
             left join clanky cl ON (u.id = cl.obrazek_id)
             group by u.id
-            order by u.id desc;");
+            order by u.id desc
+	    limit ? offset ?;",$limit, $offset);
     }
     public function getImages() {
         return $this->database->fetchAll("SELECT * FROM upload
