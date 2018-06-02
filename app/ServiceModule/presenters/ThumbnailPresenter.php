@@ -16,7 +16,7 @@ class ThumbnailPresenter extends \App\Presenters\BasePresenter
     {
         if (!empty($width) && !preg_match('/^\d+$/', $width)) $this->terminate();
         if (!empty($height) && !preg_match('/^\d+$/', $height)) $this->terminate();
-        if ($width > 2000 || $height > 2000) $this->reminate();
+        if ($width > 2000 || $height > 2000) $this->terminate();
         if (!in_array($format, array("jpg", "jpeg", "png"))) $this->terminate();
         if (!empty($crop)) {$crop = true;} else {$crop = false;}
 
