@@ -32,6 +32,8 @@ services:
 	- Models\Rss
 	- Models\Feeds
 	- Models\FeedGroups
+	- App\Factories\KeycloakFactory ( %keycloak.serverUrl%, %keycloak.realm%, %keycloak.clientId%, %keycloak.clientSecret%)
+
 
 	router: @App\RouterFactory::createRouter
 

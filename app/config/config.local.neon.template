@@ -1,12 +1,17 @@
 parameters:
+	keycloak:
+		serverUrl: 
+		realm:
+		clientId:
+		clientSecret:
 
 
 database:
 	dsn: 'mysql:host=127.0.0.1;dbname=listy'
-	user: 
-	password: 
+	user:
+	password:
 
 	options:
 		lazy: yes
 tracy:
-	email: 
+	email:

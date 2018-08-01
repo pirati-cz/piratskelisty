@@ -5,6 +5,7 @@ namespace Models;
 use Nette,
     Nette\Utils\Strings;
 
+use \League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
 /**
  * Users management.
@@ -18,7 +19,8 @@ class Uzivatele extends \Nette\Object implements \IUzivatele
         COLUMN_IDENTITY = 'identita',
         COLUMN_NAME = 'jmeno',
         COLUMN_EMAIL = 'email',
-        COLUMN_ROLE = 'role';
+        COLUMN_ROLE = 'role',
+        COLUMN_KEYCLOAK_ID = 'keycloak_id';
 
 
     /** @var Nette\Database\Context */
@@ -46,6 +48,23 @@ class Uzivatele extends \Nette\Object implements \IUzivatele
         $user = $this->get($openId->identity);
         return $user;
     }
+
+    public function addKeycloak(ResourceOwnerInterface $user) {
+        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+
+        $arr[self::COLUMN_NAME] = $user->getName();
+        $arr[self::COLUMN_EMAIL] = $user->getEmail();
+
+        if (empty($uzivatel)) {
+            $arr = array(self::COLUMN_KEYCLOAK_ID => $user->getId());
+            $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
+        } else {
+            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+        }
+        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+        return $uzivatel;
+    }
+
     public function get($identity) {
         if (\is_numeric($identity)) {
             return $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_ID."=?;",$identity);

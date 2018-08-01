@@ -24,6 +24,19 @@ class SignPresenter extends BasePresenter
         $this->httpRequest = $httpRequest;
     }
 
+    private $keycloak;
+
+    public function injectKeycloak(\App\Factories\KeycloakFactory $keycloak) {
+        $this->keycloak = $keycloak;
+    }
+
+    /** @var Nette\Http\Session */
+    private $session;
+
+    public function injectSession(\Nette\Http\Session $session) {
+        $this->session = $session;
+    }
+
 
     public function actionPirateId() {
         $openId = new \LightOpenID($this->httpRequest->getUrl()->getAuthority());
@@ -81,6 +94,48 @@ class SignPresenter extends BasePresenter
 
 
         $this->redirect(":Homepage:");
+    }
+
+    public function actionKeycloak($code=null, $state=null) {
+        $provider = $this->keycloak->create($this->link("//Sign:keycloak"));
+        $oauth2state = $this->session->getSection('keycloak')->oauth2state;
+        if (empty($code)) {
+            $authUrl = $provider->getAuthorizationUrl();
+            $this->session->getSection("keycloak")->oauth2state = $provider->getState();
+            $this->redirectUrl($authUrl);
+        } elseif (empty($state) || $state!==$oauth2state) {
+            unset($this->session->getSection('keycloak')->oauth2state);
+            $this->flashMessage("Neplatný stav přihlášení.");
+            $this->redirect("Homepage:");
+        } else {
+          // Try to get an access token (using the authorization coe grant)
+            try {
+                $token = $provider->getAccessToken('authorization_code', [
+                    'code' => $code
+                ]);
+            } catch (\Exception $e) {
+                \Tracy\Debugger::log($e);
+                $this->flashMessage('Přihlášení přes Keycloak se nezdařilo.');
+                $this->redirect("Homepage:");
+            }
+            try {
+
+                $oAuthUser = $provider->getResourceOwner($token);
+                $uzivatel = $this->uzivatele->addKeycloak($oAuthUser);
+                $role = $this->uzivatele->getRole($uzivatel->id);
+                $identity = new \Nette\Security\Identity($uzivatel->id, $role, $uzivatel);
+                $this->getUser()->login($identity);
+                $this->flashMessage("Uživatel přihlášen přes KeyCloak");
+
+            } catch (\Exception $e) {
+                \Tracy\Debugger::log($e);
+                $this->flashMessage('Získání údajů o uživateli z Keycloak se nezdařilo.');
+                $this->redirect("Homepage:");
+            }
+
+        }
+        $this->redirect("Homepage:");
+
     }
 
 
