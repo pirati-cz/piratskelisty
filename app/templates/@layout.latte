@@ -65,7 +65,9 @@
         {if $user->isAllowed("feeds", "zobrazit")}
             <a n:href=":Redakce:Feeds:">Feeds</a>
         {/if}
-        <a n:href=":Redakce:Stitky:">Štítky</a>
+        {if $user->isAllowed("stitky", "zobrazit")}
+            <a n:href=":Redakce:Stitky:">Štítky</a>
+        {/if}
         {if $user->isAllowed("spravci", "zobrazit")}
             <a n:href=":Redakce:Spravce:">Správa</a>
         {/if}

@@ -11,7 +11,13 @@ use Nette\Application\UI\Form;
  */
 class StitkyPresenter extends BasePresenter
 {
-
+    public function startup() {
+        parent::startup();
+        if (!$this->getUser()->isAllowed("stitky")) {
+            $this->flashMessage("Nemáte oprávnění pro vstup do této sekce.");
+            $this->redirect(":Homepage:");
+        }
+    }
     public function createComponentStitek() {
         $form = new Form();
         $form->addText("stitek", "Štítek")
