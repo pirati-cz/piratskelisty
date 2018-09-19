@@ -28,7 +28,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $form->addText("keyword", "Klíčové slovo");
         $form->onSuccess[] = function($form) {
             $vals = $form->getValues();
-            $this->redirect("Homepage:default", array("search" => $vals['keyword']));
+            $this->redirect(":Homepage:default", array("search" => $vals['keyword']));
         };
         return $form;
     }
