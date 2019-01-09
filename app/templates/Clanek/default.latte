@@ -58,7 +58,9 @@
 {/if}
 
 
-<h3 id="komentare" >Komentáře k článku</h3>
+<div id="show_comments" style="margin-top: 2em; display: inline-block; border: 1px solid #0e479b; background: #257dff; border-radius: 5px; padding: 0.5em 1em; font-weight: bold; color: white; cursor: pointer;">Zobrazit diskusi</div>
+<div id="all_comments" style="display:none;">
+<h3 id="komentare">Komentáře k článku</h3>
 {snippet pridej_komentar}
 {if empty($pridej_komentar)}
 <a n:href="komentuj!" class="ajax" >přidat komentář</a>
@@ -88,6 +90,7 @@ $(function() {
 
 {/if}
 {/snippet}
+</div>
 
 
 </div>
@@ -119,6 +122,10 @@ $.ajax( {
     } );                   return false;
     });
 
+    $('#show_comments').on('click', function(event){
+	    $('#all_comments').show();
+	    $('#show_comments').hide();
+    });
 });
 </script>
 {/block}
