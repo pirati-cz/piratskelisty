@@ -56,7 +56,7 @@ class Uzivatele extends \Nette\Object implements \IUzivatele
         $arr[self::COLUMN_EMAIL] = $user->getEmail();
 
         if (empty($uzivatel)) {
-            $arr = array(self::COLUMN_KEYCLOAK_ID => $user->getId());
+            $arr[self::COLUMN_KEYCLOAK_ID] = $user->getId();
             $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
         } else {
             $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
