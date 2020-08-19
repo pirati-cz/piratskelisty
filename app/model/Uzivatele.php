@@ -56,7 +56,7 @@ class Uzivatele implements \IUzivatele
         $arr[self::COLUMN_EMAIL] = $email;
 
         if (empty($uzivatel)) {
-            $arr[self::COLUMN_KEYCLOAK_ID] = $id;
+            $arr[self::COLUMN_KEYCLOAK_ID] = $keycloakId;
             $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
         } else {
             $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$id);
