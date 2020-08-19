@@ -10,6 +10,9 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	# RewriteBase /
+RewriteCond %{HTTPS} !on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [L,QSA,NE]
 
 
 RewriteCond %{HTTP_HOST} plisty\.cz [NC]
@@ -21,6 +24,11 @@ RewriteRule ^(.*)$ http://www.piratskelisty.cz/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^piratskelisty\.cz [NC]
 RewriteRule ^(.*)$ http://www.piratskelisty.cz/$1 [R=301,L]
 
+RewriteRule ^kategorie/zahranici https://www.piratskelisty.cz/kategorie/svet [R=301,L]
+RewriteRule ^kategorie/nazory https://www.piratskelisty.cz/kategorie/komentare [R=301,L]
+RewriteRule ^kategorie/internet https://www.piratskelisty.cz/kategorie/archiv [R=301,L]
+RewriteRule ^kategorie/kopirovani https://www.piratskelisty.cz/kategorie/archiv [R=301,L]
+RewriteRule ^kategorie/strana https://www.piratskelisty.cz/kategorie/archiv [R=301,L]
 
 	# prevents files starting with dot to be viewed by browser
 	RewriteRule /\.|^\. - [F]
