@@ -49,19 +49,19 @@ class Uzivatele implements \IUzivatele
         return $user;
     }
 
-    public function addKeycloak(ResourceOwnerInterface $user) {
-        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+    public function addKeycloak($keycloakId, $name, $email) {
+        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$keycloakId);
 
-        $arr[self::COLUMN_NAME] = $user->getName();
-        $arr[self::COLUMN_EMAIL] = $user->getEmail();
+        $arr[self::COLUMN_NAME] = $name;
+        $arr[self::COLUMN_EMAIL] = $email;
 
         if (empty($uzivatel)) {
-            $arr[self::COLUMN_KEYCLOAK_ID] = $user->getId();
+            $arr[self::COLUMN_KEYCLOAK_ID] = $id;
             $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
         } else {
-            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$id);
         }
-        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$user->getId());
+        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$id);
         return $uzivatel;
     }
 
