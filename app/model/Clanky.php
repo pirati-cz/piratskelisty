@@ -9,7 +9,7 @@ use Nette,
 /**
  * Správa článků.
  */
-class Clanky extends \Nette\Object
+class Clanky
 {
     /** @var Nette\Database\Context */
     private $database;

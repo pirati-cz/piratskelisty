@@ -9,7 +9,7 @@ use Nette,
 /**
  * Category management.
  */
-class Rss extends \Nette\Object
+class Rss
 {
 	/** @var Nette\Database\Context */
     private $database;

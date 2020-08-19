@@ -10,7 +10,7 @@ use \League\OAuth2\Client\Provider\ResourceOwnerInterface;
 /**
  * Users management.
  */
-class Uzivatele extends \Nette\Object implements \IUzivatele
+class Uzivatele implements \IUzivatele
 {
     const
         TABLE_NAME = 'uzivatele',

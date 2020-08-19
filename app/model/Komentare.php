@@ -9,7 +9,7 @@ use Nette,
 /**
  * Category management.
  */
-class Komentare extends \Nette\Object
+class Komentare
 {
     /** @var Nette\Database\Context */
     private $database;

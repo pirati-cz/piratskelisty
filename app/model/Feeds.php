@@ -9,7 +9,7 @@ use Nette,
 /**
  * Správa feeds.
  */
-class Feeds extends \Nette\Object
+class Feeds
 {
     /** @var Nette\Database\Context */
     private $database;
