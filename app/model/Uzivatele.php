@@ -59,9 +59,9 @@ class Uzivatele implements \IUzivatele
             $arr[self::COLUMN_KEYCLOAK_ID] = $keycloakId;
             $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
         } else {
-            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$id);
+            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$keycloakId);
         }
-        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$id);
+        $uzivatel = $this->database->fetch("SELECT * FROM ".self::TABLE_NAME." WHERE ".self::COLUMN_KEYCLOAK_ID."=?;",$keycloakId);
         return $uzivatel;
     }
 
