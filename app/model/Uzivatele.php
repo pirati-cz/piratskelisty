@@ -5,8 +5,6 @@ namespace Models;
 use Nette,
     Nette\Utils\Strings;
 
-use \League\OAuth2\Client\Provider\ResourceOwnerInterface;
-
 /**
  * Users management.
  */
@@ -30,23 +28,6 @@ class Uzivatele implements \IUzivatele
     public function __construct(Nette\Database\Context $database)
     {
         $this->database = $database;
-    }
-
-    public function add(\LightOpenID $openId) {
-        $attrs = $openId->getAttributes();
-        $uzivatel = $this->get($openId->identity);
-        $arr = array(self::COLUMN_IDENTITY => $openId->identity);
-
-        if (!empty($attrs['namePerson'])) $arr[self::COLUMN_NAME] = $attrs['namePerson'];
-        if (!empty($attrs['contact/email'])) $arr[self::COLUMN_EMAIL] = $attrs['contact/email'];
-
-        if (empty($uzivatel)) {
-            $this->database->query("INSERT INTO ".self::TABLE_NAME, $arr);
-        } else {
-            $this->database->query("UPDATE ".self::TABLE_NAME." SET ",$arr, " WHERE ".self::COLUMN_IDENTITY."=?;",$openId->identity);
-        }
-        $user = $this->get($openId->identity);
-        return $user;
     }
 
     public function addKeycloak($keycloakId, $name, $email) {

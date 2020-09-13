@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6da8eb4d9f514b97d5af195eacb1d1da",
+    "content-hash": "42cb0dd491d09b1d53a649252fef070e",
     "packages": [
         {
             "name": "jumbojett/openid-connect-php",
@@ -1576,40 +1576,6 @@
                 }
             ],
             "time": "2020-09-08T04:24:43+00:00"
-        },
-        {
-            "name": "soundasleep/lightopenid",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/soundasleep/lightopenid.git",
-                "reference": "ad2860b94c4410b331317095b15020664ba126c2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/soundasleep/lightopenid/zipball/ad2860b94c4410b331317095b15020664ba126c2",
-                "reference": "ad2860b94c4410b331317095b15020664ba126c2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.3"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "./"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A PHP 5 library for easy openid authentication.",
-            "homepage": "http://code.google.com/p/lightopenid/",
-            "keywords": [
-                "OpenId"
-            ],
-            "time": "2014-12-08T02:57:33+00:00"
         },
         {
             "name": "sunra/php-simple-html-dom-parser",
