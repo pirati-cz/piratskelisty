@@ -2,39 +2,40 @@
 
 namespace App\Presenters;
 
-use Nette,
-	App\Model,
-	Nette\Diagnostics\Debugger;
+use Nette;
+use Nette\Application\Responses;
+use Tracy\ILogger;
 
 
-/**
- * Error presenter.
- */
-class ErrorPresenter extends BasePresenter
+class ErrorPresenter extends Nette\Object implements Nette\Application\IPresenter
 {
+    /** @var ILogger */
+    private $logger;
 
-	/**
-	 * @param  Exception
-	 * @return void
-	 */
-	public function renderDefault($exception)
-	{
-		if ($exception instanceof Nette\Application\BadRequestException) {
-			$code = $exception->getCode();
-			// load template 403.latte or 404.latte or ... 4xx.latte
-			$this->setView(in_array($code, array(403, 404, 405, 410, 500)) ? $code : '4xx');
-			// log to access.log
-			Debugger::log("HTTP code $code: {$exception->getMessage()} in {$exception->getFile()}:{$exception->getLine()}", 'access');
 
-		} else {
-			$this->setView('500'); // load template 500.latte
-			Debugger::log($exception, Debugger::ERROR); // and log exception
-		}
+    public function __construct(ILogger $logger)
+    {
+        $this->logger = $logger;
+    }
 
-		if ($this->isAjax()) { // AJAX request? Note this error in payload.
-			$this->payload->error = TRUE;
-			$this->terminate();
-		}
-	}
+
+    /**
+     * @return Nette\Application\IResponse
+     */
+    public function run(Nette\Application\Request $request)
+    {
+        $e = $request->getParameter('exception');
+
+        if ($e instanceof Nette\Application\BadRequestException) {
+            // $this->logger->log("HTTP code {$e->getCode()}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}", 'access');
+            $module = substr($request->getPresenterName(), 0, strrpos($request->getPresenterName(), ':'));
+            return new Responses\ForwardResponse($request->setPresenterName($module . ($module ? ':' : '') . 'Error4xx'));
+        }
+
+        $this->logger->log($e, ILogger::EXCEPTION);
+        return new Responses\CallbackResponse(function () {
+            require __DIR__ . '/../templates/Error/500.latte';
+        });
+    }
 
 }
