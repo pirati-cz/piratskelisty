@@ -7,6 +7,7 @@ use Nette;
 
 class Error4xxPresenter extends BasePresenter
 {
+    use Nette\SmartObject;
 
     public function startup()
     {
