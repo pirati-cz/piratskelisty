@@ -23,41 +23,6 @@ class ClanekPresenter extends BasePresenter
         $this->komentare = $komentare;
     }
 
-    protected function createComponentKomentar()
-    {
-        $form = new Form;
-        $form->addText("jmeno", "Jméno")
-            ->addRule(Form::FILLED, "Vyplňte prosím jméno.")
-            ->addRule(Form::MAX_LENGTH, "Jméno je příliš dlouhé. Maximální délka jména je 64 znaků.", 64);
-
-        $form->addTextArea("text", "Komentář")
-            ->addRule(Form::FILLED, "Vyplňte prosím text komentáře.")
-            ->addRule(Form::MAX_LENGTH, "Text komentáře je příliš dlouhý. Maximální délka textu je 1000 znaků.", 1000);
-        $form->addHidden("skryte");
-        $form->addSubmit("komentuj", "Přidat komentář");
-        $form->addHidden("clanek_id")->setValue($this->id);
-        $form->onSuccess[] = function($form) {
-            $vals = $form->getValues();
-            if ($vals['skryte'] == 'asdf') {
-                $this->komentare->add($vals);
-                $this->template->pridej_komentar = false;
-            }
-            $this->redrawControl("komentare");
-            $this->redrawControl("pridej_komentar");
-
-            if (!$this->isAjax()) {
-                $this->redirect("this");
-            }
-        };
-        return $form;
-    }
-
-    public function handleKomentuj()
-    {
-        $this->template->pridej_komentar = true;
-        $this->redrawControl("pridej_komentar");
-    }
-
     public function renderDefault($id, $nazev)
     {
         $clanek = $this->clanky->get($this->id);

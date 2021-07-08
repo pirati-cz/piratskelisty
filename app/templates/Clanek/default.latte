@@ -57,41 +57,21 @@
 {/foreach}
 {/if}
 
-
-<div id="show_comments" style="margin-top: 2em; display: inline-block; border: 1px solid #0e479b; background: #257dff; border-radius: 5px; padding: 0.5em 1em; font-weight: bold; color: white; cursor: pointer;">Zobrazit diskusi</div>
-<div id="all_comments" style="display:none;">
-<h3 id="komentare">Komentáře k článku</h3>
-{snippet pridej_komentar}
-{if empty($pridej_komentar)}
-<a n:href="komentuj!" class="ajax" >přidat komentář</a>
-{else}
-{control komentar}
-<script type="text/javascript">
-$(function() {
-	$('#frm-komentar input[name=skryte]').val("asdf");
-});
-</script>
+{if $komentare}
+	<div id="show_comments" style="margin-top: 2em; display: inline-block; border: 1px solid #0e479b; background: #257dff; border-radius: 5px; padding: 0.5em 1em; font-weight: bold; color: white; cursor: pointer;">Zobrazit diskusi</div>
+	<div id="all_comments" style="display:none;">
+		<h3 id="komentare">Komentáře k článku</h3>
+		{foreach $komentare as $komentar}
+			<div class="komentar_header">
+				<strong>{$komentar['jmeno']}</strong>
+				{$komentar['datum']|date:"d.m.Y H:i"}
+			</div>
+			<p>
+				{$komentar['text']|breaklines}
+			</p>
+		{/foreach}
+	</div>
 {/if}
-{/snippet}
-
-{snippet komentare}
-{if empty($komentare)}
-<p>Dosud nebyly vloženy žádné komentáře.</p>
-{else}
-{foreach $komentare as $komentar}
-<div class="komentar_header">
-<strong>{$komentar['jmeno']}</strong>
-{$komentar['datum']|date:"d.m.Y H:i"}
-</div>
-<p>
-{$komentar['text']|breaklines}
-</p>
-{/foreach}
-
-{/if}
-{/snippet}
-</div>
-
 
 </div>
 </div>
@@ -103,25 +83,6 @@ $(function() {
 <script type="text/javascript">
 // po načtení stránky
 $(function () {
-form = $('#frm-komentar');
-
-    $(document).on('click','#frm-komentar :submit', function(event) {
-$.ajax( {
-      type: "POST",
-      url: $(this).parents('#frm-komentar').attr( 'action' ),
-      data:  $(this).parents('#frm-komentar').serialize(),
-
-    } );                return false;
-    });
-    $(document).on('submit','#frm-komentar', function(event) {
-$.ajax( {
-      type: "POST",
-      url: form.attr( 'action' ),
-      data:  form.serialize(),
-
-    } );                   return false;
-    });
-
     $('#show_comments').on('click', function(event){
 	    $('#all_comments').show();
 	    $('#show_comments').hide();
